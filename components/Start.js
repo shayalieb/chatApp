@@ -31,21 +31,26 @@ const Start = ({ navigation }) => {
                     >
                         <TouchableOpacity
                             style={[styles.radioButton, { backgroundColor: '#090C08' }]}
-                            onPress={() => setColor('#090C08', { color: color })}></TouchableOpacity>
+                            onPress={() => setColor('#090C08', { color: color })}
+                        />
                         <TouchableOpacity
                             style={[styles.radioButton, { backgroundColor: '#474056' }]}
-                            onPress={() => setColor('#474056', { color: color })}></TouchableOpacity>
+                            onPress={() => setColor('#474056', { color: color })}
+                        />
                         <TouchableOpacity
                             style={[styles.radioButton, { backgroundColor: '#8A95A5' }]}
-                            onPress={() => setColor('#8A95A5', { color: color })}></TouchableOpacity>
+                            onPress={() => setColor('#8A95A5', { color: color })}
+                        />
                         <TouchableOpacity
                             style={[styles.radioButton, { backgroundColor: '#B9C6AE' }]}
-                            onPress={() => setColor('#B9C6AE', { color: color })}></TouchableOpacity>
+                            onPress={() => setColor('#B9C6AE', { color: color })}
+                        />
                     </View>
                     <Button
                         style={styles.button}
                         title='Start Chatting'
-                        onPress={() => navigation.navigate('Chat', { name: name })}
+                        onPress={() =>
+                            navigation.navigate('Chat', { name: name })}
                     >
                         <Text
                             style={styles.title}
