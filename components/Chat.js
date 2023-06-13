@@ -13,7 +13,7 @@ const Chat = ({ route, navigation }) => {
     }, [])
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: color }]}>
             <Text>Begin your chat</Text>
         </View>
     );

@@ -14,7 +14,7 @@ const Start = ({ navigation }) => {
             style={styles.backgroundImage}
         >
             <View style={styles.container}>
-                <View style={styles.subContainer}>
+                <View>
                     <Text style={styles.title}>chatApp!</Text>
                 </View>
                 <View style={styles.subContainer}>
@@ -45,12 +45,12 @@ const Start = ({ navigation }) => {
                             style={[styles.radioButton, { backgroundColor: '#B9C6AE' }]}
                             onPress={() => setColor('#B9C6AE', { color: color })}
                         />
-                    </View>
+                     </View>
                     <Button
                         style={styles.button}
                         title='Start Chatting'
                         onPress={() =>
-                            navigation.navigate('Chat', { name: name })}
+                            navigation.navigate('Chat', { name: name, color: color })}
                     >
                         <Text
                             style={styles.title}
@@ -58,6 +58,7 @@ const Start = ({ navigation }) => {
                             Start Chatting
                         </Text>
                     </Button>
+                   
                 </View>
             </View>
         </ImageBackground>
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     subContainer: {
+        backgroundColor: 'white',
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
