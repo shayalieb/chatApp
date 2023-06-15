@@ -1,4 +1,4 @@
-//Import dependencies 
+//Import dependencies and screens
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Start from './components/Start.js';
@@ -6,7 +6,9 @@ import Chat from './components/Chat.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+//Create the navigator
 const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   return (

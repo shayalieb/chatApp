@@ -7,7 +7,9 @@ const Start = ({ navigation }) => {
     const [name, setName] = useState('');
     const [color, setColor] = useState('');
 
+    //The render will take the name, and selected background color and implement in from the start page and send it to the chat page
     return (
+        // Background image for start screen
         <ImageBackground
             source={require('../img/BackgroundImage.png')}
             resizeMode="cover"
@@ -27,7 +29,6 @@ const Start = ({ navigation }) => {
                     <Text>Choose a background color?</Text>
                     <View
                         style={styles.radioButtonContainer}
-
                     >
                         <TouchableOpacity
                             style={[styles.radioButton, { backgroundColor: '#090C08' }]}
@@ -45,7 +46,7 @@ const Start = ({ navigation }) => {
                             style={[styles.radioButton, { backgroundColor: '#B9C6AE' }]}
                             onPress={() => setColor('#B9C6AE', { color: color })}
                         />
-                     </View>
+                    </View>
                     <Button
                         style={styles.button}
                         title='Start Chatting'
@@ -58,13 +59,14 @@ const Start = ({ navigation }) => {
                             Start Chatting
                         </Text>
                     </Button>
-                   
+
                 </View>
             </View>
         </ImageBackground>
     )
 }
 
+//Styling elements
 const styles = StyleSheet.create({
     backgroundImage: {
         flex: 1,
@@ -77,9 +79,13 @@ const styles = StyleSheet.create({
     subContainer: {
         backgroundColor: 'white',
         flex: 1,
+        marginTop: 250,
+        marginBottom: 250,
         alignItems: 'center',
         justifyContent: 'center',
         margin: 25,
+        borderRadius: 15,
+        backgroundColor: '#d9d9d9',
     },
     radioButtonContainer: {
         width: '70%',
