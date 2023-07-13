@@ -1,13 +1,19 @@
-import { Bubble, GiftedChat } from "react-native-gifted-chat";
+
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { KeyboardAvoidingView, Platform } from "react-native-web";
+
+//Gifted chat dependencies 
+import { Bubble, GiftedChat } from "react-native-gifted-chat";
+
+//React-native styling dependencies 
+import { StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Platform } from "react-native";
+
+
 
 //Core variables
 const Chat = ({ route, navigation }) => {
+    const { name, color, userID } = route.params;
     const [messages, setMessages] = useState([])
-    const { name } = route.params;
-    const { color } = route.params;
 
     //Mount the setMessage to the page
     useEffect(() => {
@@ -40,7 +46,7 @@ const Chat = ({ route, navigation }) => {
                     backgroundColor: '#59c281'
                 },
                 left: {
-                    backgroundColor: '2de373'
+                    backgroundColor: '#2de373'
                 }
             }}
         />
@@ -50,7 +56,7 @@ const Chat = ({ route, navigation }) => {
     useEffect(() => {
         navigation.setOptions({
             title: name,
-            color: color
+            headerTintColor: color
         })
     }, []);
 
@@ -66,10 +72,9 @@ const Chat = ({ route, navigation }) => {
                 style={styles.chatBox}
                 messages={messages}
                 renderBubble={renderBubble}
-                onSend={messages => onSend(messages)}
+                onSend={(messages) => onSend(messages)}
                 user={{
-                    _id: 1,
-                    name
+                    _id: userID, name
                 }}
             />
             {/* In case the keyboard cuts into the view */}
