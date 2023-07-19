@@ -1,97 +1,130 @@
-
+//React dependencies
 import { useEffect, useState } from "react";
+//React native dependencies
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+//Firestore dependencies
+import { collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
 
-//Gifted chat dependencies 
-import { Bubble, GiftedChat } from "react-native-gifted-chat";
+//Main Chat component
+const Chat = ({ db, route, navigation, isConnected }) => {
+  const { name, color, userID } = route.params;//Get the name and background color
+  const [messages, setMessages] = useState([])//Set the state of the messages
 
-//React-native styling dependencies 
-import { StyleSheet, View } from "react-native";
-import { KeyboardAvoidingView, Platform } from "react-native";
+  //Load the cached messages
+  const loadCachedMessages = async () => {
+    const cachedMessages = await AsyncStorage.getItem('messages') || '[]';
+    setMessages(JSON.parse(cachedMessages));
+  };
 
+  let unsubMessages;
+  useEffect(() => {
+    navigation.setOptions({
+      title: name,
+      headerStyle: {
+        backgroundColor: color,
+      },
+      headerTitleStyle: {
+        color: color === '?' ? '#000' : '#fff',//Incase no color selected set default
+      },
+    });
 
+    if (isConnected === true) {
+      if (unsubMessages) unsubMessages();
+      unsubMessages = null;
 
-//Core variables
-const Chat = ({ route, navigation }) => {
-    const { name, color, userID } = route.params;
-    const [messages, setMessages] = useState([])
+      const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
+      unsubMessages = onSnapshot(q, (documentsSnapshot) => {
+        let newMessages = [];
+        documentsSnapshot.forEach((doc) => {
+          newMessages.push({
+            id: doc.id,
+            ...doc.data(),
+            createdAt: new Date(doc.data().createdAt.toMillis()),//Setting the date objects
+          });
+        });
+        cachedMessages(newMessages);
+        setMessages(newMessages);
+      });
+    } else loadCachedMessages();
 
-    //Mount the setMessage to the page
-    useEffect(() => {
-        setMessages([
-            {
-                _id: 1,
-                text: 'Hello i am a developer',
-                createdAt: new Date(),
-                user: {
-                    _id: 2,
-                    name: 'React Native',
-                    avatar: 'https://placeimg.com/140/140/any'
-                },
-            },
-            {
-                _id: 2,
-                text: 'This is a system test',
-                createdAt: new Date(),
-                system: true,
-            }
-        ]);
-    }, []);
-
-    //Functionality of the bubble that surrounds the text, like color...
-    const renderBubble = (props) => {
-        return <Bubble
-            {...props}
-            wrapperStyle={{
-                right: {
-                    backgroundColor: '#59c281'
-                },
-                left: {
-                    backgroundColor: '#2de373'
-                }
-            }}
-        />
+    //Clean up messages
+    return () => {
+      if (unsubMessages) {
+        unsubMessages();
+      }
     }
+  }, [isConnected]);
 
-    //Mounting the name and background color to the chat page
-    useEffect(() => {
-        navigation.setOptions({
-            title: name,
-            headerTintColor: color
+  //Cache current messages
+  const cachedMessages = async (messagesToCache) => {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache));
+    } catch (error) {
+      console.log(error.message)
+    }
+  };
+
+  //Send new messages
+  const onSend = (newMessages) => {
+    addDoc(collection(db, 'messages'), newMessages[0]);
+  };
+
+  useEffect(() => {
+    navigation.setOptions({ title: name });
+    const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+    const unsubMessages = onSnapshot(q, (docs) => {
+      let newMessages = [];
+      docs.forEach(doc => {
+        newMessages.push({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis())
         })
-    }, []);
-
-    //when a message is sent, it should be shown 
-    const onSend = (newMessages) => {
-        setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
+      })
+      setMessages(newMessages);
+    })
+    return () => {
+      if (unsubMessages) unsubMessages();
     }
+  }, []);
 
-    //the render that applies all the functionality
+  //Visual text bubble configuration
+  const renderBubble = (props) => {
     return (
-        <View style={[styles.container, { backgroundColor: color }]}>
-            <GiftedChat
-                style={styles.chatBox}
-                messages={messages}
-                renderBubble={renderBubble}
-                onSend={(messages) => onSend(messages)}
-                user={{
-                    _id: userID, name
-                }}
-            />
-            {/* In case the keyboard cuts into the view */}
-            {Platform.OS === 'android' ? <KeyboardAvoidingView behavior='height' /> : null}
-        </View>
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: { backgroundColor: '#aff5a2' },
+          left: { backgroundColor: '#a7e6f2' },
+        }}
+      />
     );
-};
+  };
 
+  //Return the final render  
+  return (
+    <View style={[styles.container, { backgroundColor: color }]}>
+      <GiftedChat
+        messages={messages}
+        renderBubble={renderBubble}
+        onSend={(messages) => onSend(messages)}
+        user={{ _id: userID, name }}
+      />
+      {Platform.OS === 'android' ? (
+        <KeyboardAvoidingView behavior="height" />
+      ) : null}
+    </View>
+  )
+}
+
+//Styling configurator
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    chatBox: {
-        width: '80%',
-        backgroundColor: 'white',
-        justifyContent: 'center'
-    }
-});
+  container: {
+    flex: 1,
+    marginBottom: 10
+  }
+})
 
 export default Chat;
