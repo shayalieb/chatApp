@@ -14,10 +14,11 @@ const Chat = ({ db, route, navigation, isConnected }) => {
 
   //Load the cached messages
   const loadCachedMessages = async () => {
-    const cachedMessages = await AsyncStorage.getItem('messages') || '[]';
+    const cachedMessages = await AsyncStorage.getItem('messages') || '[]';//Load the cached messages
     setMessages(JSON.parse(cachedMessages));
   };
 
+  //Subscribe and unsubscribe to sending messages
   let unsubMessages;
   useEffect(() => {
     navigation.setOptions({
@@ -34,6 +35,7 @@ const Chat = ({ db, route, navigation, isConnected }) => {
       if (unsubMessages) unsubMessages();
       unsubMessages = null;
 
+      //Sending and receiving query's
       const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
       unsubMessages = onSnapshot(q, (documentsSnapshot) => {
         let newMessages = [];

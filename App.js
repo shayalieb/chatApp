@@ -25,6 +25,7 @@ const App = () => {
     measurementId: "G-0M0EDT94BN"
   };
 
+  //Functions that send and receive data from firebase
   const connectionStatus = useNetInfo();
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);

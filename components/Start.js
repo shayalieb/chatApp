@@ -24,16 +24,10 @@ const Start = ({ navigation }) => {
             })
             .catch((error) => {
                 Alert.alert('Unable to sign in, please try again later');
+                console.log(error)
             })
     };
 
-    //If there is a user, stringify the user and send it on to the chat
-    // useEffect(() => {
-    //     if (name) {
-    //         const serializedUser = JSON.stringify(name);
-    //         navigation.navigate('Chat', { serializedUser });
-    //     }
-    // }, [name, navigation]);
 
     return (
         <ImageBackground
