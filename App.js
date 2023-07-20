@@ -34,7 +34,7 @@ const App = () => {
 
   //If there is or isn't internet connection
   useEffect(() => {
-    if (!connectionStatus.isConnected) {
+    if (!connectionStatus.isConnected ===  true) {
       Alert.alert('There is no internet connection');
       disableNetwork(db);
     } else {
