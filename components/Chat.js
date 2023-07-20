@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 //React native dependencies
 import { View, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
-import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { GiftedChat, Bubble, InputToolbar } from "react-native-gifted-chat";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 //Firestore dependencies
 import { collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
@@ -73,6 +73,12 @@ const Chat = ({ db, route, navigation, isConnected }) => {
     addDoc(collection(db, 'messages'), newMessages[0]);
   };
 
+  //Remove the text input function if there is no connection, and show if there is connection
+  const renderInputToolBar = (props) => {
+    if (isConnected) return <InputToolbar {...props} />;
+    else return null;
+  }
+
   useEffect(() => {
     navigation.setOptions({ title: name });
     const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
@@ -113,6 +119,7 @@ const Chat = ({ db, route, navigation, isConnected }) => {
         renderBubble={renderBubble}
         onSend={(messages) => onSend(messages)}
         user={{ _id: userID, name }}
+        renderInputToolbar={renderInputToolBar}
       />
       {Platform.OS === 'android' ? (
         <KeyboardAvoidingView behavior="height" />
