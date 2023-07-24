@@ -10,7 +10,7 @@ import CustomActions from './CustomActions'
 import MapView from 'react-native-maps'
 
 //Main Chat component
-const Chat = ({ db, route, navigation, isConnected }) => {
+const Chat = ({ db, route, navigation, isConnected, storage }) => {
   const { name, color, userID } = route.params;//Get the name and background color
   const [messages, setMessages] = useState([])//Set the state of the messages
 
@@ -150,7 +150,7 @@ const Chat = ({ db, route, navigation, isConnected }) => {
       <GiftedChat
         messages={messages}
         renderBubble={renderBubble}
-        onSend={(messages) => onSend(messages)}
+        onSend={messages => onSend(messages)}
         user={{ _id: userID, name }}
         renderInputToolbar={renderInputToolBar}
         renderActions={renderCustomActions}
