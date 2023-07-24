@@ -1,5 +1,5 @@
 <h1>ChatApp</h1>
-![Alt text](src/5.5%20readme-1.PNG, src/5.5%20readme-2.PNG)
+![Alt text](5.5%20readme-1.PNG)
 <br>
 <h3>About the ChatApp application</h3>
 A chat application that allows users to connect with family and friends, exchange messages, share images, and location information.
